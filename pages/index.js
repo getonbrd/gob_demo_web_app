@@ -12,7 +12,8 @@ const loginUrl = `${host}/webpros/login?api_mode=true&app_url=https://gobapp.jua
 const currentTokens = {token: null, refreshToken: null}
 
 const updateTokenAndretry = async (response, callback) => {
-  if(response.status === 401) {
+  const {message, code}  = await response.json()
+  if(response.status === 401 && message.includes('expired')) {
     const tokenResponse = await fetch(`${host}/api/v0/auth_tokens`, {
       method:'POST',
       headers:{
